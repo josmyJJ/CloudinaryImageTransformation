@@ -39,7 +39,9 @@ public class HomeController {
     try {
       Map uploadResult =  cloudc.upload(file.getBytes(),
               ObjectUtils.asMap("resourcetype", "auto"));
-      actor.setHeadshot(uploadResult.get("url").toString());
+      String clodinaryImageId = (String) uploadResult.get("public_id");
+      String transformedImage = cloudc.createUrl(clodinaryImageId);
+      actor.setHeadshot(transformedImage);
       actorRepository.save(actor);
     } catch (IOException e){
       e.printStackTrace();

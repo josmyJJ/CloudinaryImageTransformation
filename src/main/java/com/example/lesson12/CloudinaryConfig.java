@@ -11,14 +11,9 @@ import java.util.Map;
 
 @Component
 public class CloudinaryConfig {
-//  This is an object that will be used to apply your image tranfomations,
-// and generate a URL with those transformations so that you can use
-// the image later.
+
   private Cloudinary cloudinary;
 
-//  It takes the values of the cloudinary settings you entered in your
-// application.properties file, and assigns those to the variables that
-// the Singleton class will use to connect to Cloudinary.
   @Autowired
   public CloudinaryConfig(@Value("${cloudinary.apikey}") String key,
                           @Value("${cloudinary.apisecret}") String secret,
@@ -29,8 +24,6 @@ public class CloudinaryConfig {
     cloudinary.config.apiKey=key;
   }
 
-//  This passes the file from the user's computer to Cloudinary, returning an
-// object which contains all of the properties for the transformed image.
   public Map upload(Object file, Map options){
     try{
       return cloudinary.uploader().upload(file, options);
@@ -40,13 +33,9 @@ public class CloudinaryConfig {
     }
   }
 
-//  This creates a Cloudinary URL 'preset' trasnformations. In this case,
-// the width, height and border can automatically be applied each time this
-// method is called, and a URL to the transformed image will be returned.
-  public String createUrl(String name, int width, int height, String action){
-    return cloudinary.url()
-            .transformation(new Transformation().width(width).height(height)
-                    .border("2px_solid_black").crop(action))
-            .imageTag(name);
+  public String createUrl(String name) {
+    return cloudinary.url().transformation( new Transformation().width(300)
+            .height(300).crop("fill").radius(10)
+    ).generate(name);
   }
 }
